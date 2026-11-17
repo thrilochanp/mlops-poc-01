@@ -1,0 +1,39 @@
+# --- core ---
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.5.1
+joblib==1.4.2
+faker==26.0.0
+pydantic==2.8.2
+pydantic-settings==2.4.0
+
+# --- OCR / imaging ---
+pillow==10.4.0
+pytesseract==0.3.13
+
+# --- orchestration ---
+prefect==2.20.4
+# Pinned: anyio >= 4.5 breaks Prefect 2.x's flow-run task-group teardown
+# (TypeError: Can't instantiate abstract class GatherTaskGroup) even though
+# Prefect's own metadata allows newer anyio. See README "Known simplifications".
+anyio==4.4.0
+
+# --- experiment tracking / model registry ---
+mlflow==2.15.1
+
+# --- serving ---
+fastapi==0.112.0
+uvicorn[standard]==0.30.5
+python-multipart==0.0.9
+
+# --- internal tools ---
+streamlit==1.37.1
+plotly==5.23.0
+
+# --- monitoring/eval extras ---
+scipy==1.14.0
+
+# --- dev / test / lint ---
+pytest==8.3.2
+httpx==0.27.0
+ruff==0.5.7

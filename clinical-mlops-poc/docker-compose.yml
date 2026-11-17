@@ -1,0 +1,43 @@
+services:
+  mlflow:
+    build: .
+    command: >
+      mlflow server
+        --backend-store-uri /app/mlruns
+        --default-artifact-root /app/mlruns
+        --host 0.0.0.0 --port 5000
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/app/mlruns
+      - ./data:/app/data
+      - ./logs:/app/logs
+
+  api:
+    build: .
+    command: uvicorn clinical_mlops.serving.api:app --host 0.0.0.0 --port 8000
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./mlruns:/app/mlruns
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - mlflow
+
+  streamlit:
+    build: .
+    command: streamlit run apps/streamlit_app.py --server.address 0.0.0.0 --server.port 8501
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./mlruns:/app/mlruns
+      - ./data:/app/data
+      - ./logs:/app/logs
+    depends_on:
+      - mlflow
+      - api
